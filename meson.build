@@ -93,7 +93,8 @@ lib_src = [
   'lib/http2/hpack.c',
   'lib/http2/scheduler.c',
   'lib/http2/stream.c',
-  'lib/http2/http2_debug_state.c'
+  'lib/http2/http2_debug_state.c',
+  'lib/websocket.c'
 ]
 
 osdet = build_machine.system()
@@ -117,6 +118,7 @@ inc = include_directories([
 libuv_dep = dependency('libuv', version: '>=1.8.0',
                        fallback:['libuv', 'libuv_dep'])
 zlib_dep = dependency('zlib')
+wslay_dep = dependency('libwslay')
 
 os_deps = []
 
@@ -151,7 +153,7 @@ endif
 lib = library('h2o', sources: lib_src, version: version, install: true,
   include_directories: inc,
   c_args: ['-Wall', '-Wno-unused-value', '-Wno-unused-function', '-O2'],
-  dependencies: os_deps + [libuv_dep, zlib_dep, openssl_dep],
+  dependencies: os_deps + [libuv_dep, zlib_dep, wslay_dep, openssl_dep],
 )
 
 libh2o_dep = declare_dependency(include_directories: inc, link_with: lib)
